@@ -101,6 +101,14 @@
       tags: siesta
       vars: 
         siesta_code_folder: "{{ vm_codes_folder }}"
+    - role: marvel-nccr.v_sim
+      tags: v_sim
+      vars:
+        v_sim_code_folder: "{{vm_codes_folder }}"
+    - role: marvel-nccr.bigdft
+      tags: bigdft
+      vars:
+        bigdft_code_folder: "{{vm_codes_folder }}"
     - role: marvel-nccr.cp2k
       tags: cp2k
       vars: 
