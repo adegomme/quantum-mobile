@@ -27,7 +27,7 @@
 - src: marvel-nccr.cp2k
   version: v1.1.1
 - src: marvel-nccr.bigdft
-  version: v1.3.1
+  version: v1.3.2
 - src: marvel-nccr.wannier90
   version: v1.1.2
 - src: marvel-nccr.wannier_tools
