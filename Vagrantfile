@@ -26,10 +26,16 @@ Vagrant.configure(2) do |config|
      vb.customize ["modifyvm", :id, "--vram", gconfig['vm_vram']]
      # makes mouse/typing more responsive
      vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
+     # see https://github.com/marvel-nccr/quantum-mobile/issues/99
+     vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
      vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
      vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
      # turn off remote display (requires Virtualbox Extension pack)
      vb.customize ["modifyvm", :id, "--vrde", "off"]
+
+     # enable audio (default changed to off in virtualbox 6)
+     # vb.customize ["modifyvm", :id, "--audio", "coreaudio"]
+     vb.customize ["modifyvm", :id, "--audioout", "on"]
 
      # prevent VM time slipping out of sync by more than 10s (default: 20 min)
      vb.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 10000 ]
@@ -44,11 +50,12 @@ Vagrant.configure(2) do |config|
   # Uncomment to avoid remote downloads of ISO
   #config.vbguest.no_remote = true
 
-  config.vm.box = "bento/ubuntu-16.04"
-  config.vm.box_version = "201803.24.0"
-  #config.vm.box = "bento/ubuntu-18.04"
+  #config.vm.box = "bento/ubuntu-16.04"
+  #config.vm.box_version = "201803.24.0"
+  config.vm.box = "bento/ubuntu-18.04"
+  #config.vm.box_version = "201910.21.0"
   #config.vm.box = "ubuntu/xenial64"
-  config.vm.boot_timeout = 60
+  config.vm.boot_timeout = 120
 
   ## In case you need to specify explicitly SSH credentials...
   #config.ssh.username = "ubuntu"
@@ -69,8 +76,10 @@ Vagrant.configure(2) do |config|
     ansible.verbose = "v"
     ansible.playbook = "playbook.yml"
     ansible.extra_vars = {
-       ansible_python_interpreter: "/usr/bin/python2.7",
+       ansible_python_interpreter: "/usr/bin/python3",
     }
     ansible.raw_arguments = Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
+    # Ensure that public key auth is not disabled by the user's config
+    ansible.raw_ssh_args = ['-o PubKeyAuthentication=yes -o DSAAuthentication=yes']
   end
 end
