@@ -4,7 +4,7 @@ name: CD
 # so we only run when pushing to the master branch, or creating a new tag/release
 on:
   push:
-    branches: [master]
+    branches: [add-bigdft]
     tags:
     - '*'
   # pull_request:
